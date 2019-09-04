@@ -33,10 +33,21 @@
                 android:textDirection="rtl"
                 android:layout_alignParentRight="true"
                 android:id="@+id/txtImgDate"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtImgOfTheDayInfo"
+                android:layout_marginBottom="10dp"
+                android:text="Failed URL"
+                android:visibility="gone"
+                android:autoLink="web"
+                android:linksClickable="true"
+                style="@style/HeadStyle"
+                android:id="@+id/txtErrorUrl"/>
             <ProgressBar
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_below="@id/txtImgOfTheDayInfo"
+                android:layout_below="@id/txtErrorUrl"
                 android:id="@+id/pgsImgLoading"/>
             <ImageView
                 android:id="@+id/imgToday"

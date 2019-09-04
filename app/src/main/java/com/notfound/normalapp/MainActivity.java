@@ -6,8 +6,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ClickableSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -44,11 +48,13 @@ public class MainActivity extends AppCompatActivity implements
     TextView txtDate;
     TextView txtImgTittle;
     TextView txtImgExplanation;
+    TextView txtErrorUrl;
     ProgressBar pgsImgLoading;
 
     Calendar calendar;
     ApodViewModel apodViewModel;
-    String currSelectedDate="";
+    String currSelectedDate="", img_rul = "";
+    SpannableString spannableString;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements
         txtDate = findViewById(R.id.txtImgDate);
         txtImgTittle = findViewById(R.id.txtImgTittle);
         txtImgExplanation = findViewById(R.id.txtImgDesc);
+        txtErrorUrl = findViewById(R.id.txtErrorUrl);
         pgsImgLoading = findViewById(R.id.pgsImgLoading);
 
         //setting the toolbar
@@ -82,6 +89,14 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 showDatePicker();
+            }
+        });
+
+        imgOfTheDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //showToast("Clicked on image view");
+                openFullImageViewActivity();
             }
         });
     }
@@ -147,6 +162,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        txtErrorUrl.setText("");
+        txtErrorUrl.setVisibility(View.GONE);
         String formattedDate = getFormattedDate(year,month,day);
         requestNewImage(formattedDate);
     }
@@ -172,12 +189,19 @@ public class MainActivity extends AppCompatActivity implements
                     @Override
                     public boolean onLoadFailed(GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         pgsImgLoading.setVisibility(View.GONE);
+                        txtErrorUrl.setVisibility(View.VISIBLE);
+                        txtErrorUrl.setText(apodImage.getHdurl());
+                        img_rul = "";
                         return false;
                     }
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         pgsImgLoading.setVisibility(View.GONE);
+                        txtErrorUrl.setText("");
+                        txtErrorUrl.setVisibility(View.GONE);
+                        img_rul = apodImage.getHdurl();
+                        showToast("Image loaded successfully");
                         return false;
                     }
                 })
@@ -211,5 +235,13 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         return false;
+    }
+
+    public void openFullImageViewActivity() {
+        if(img_rul != "") {
+            Intent intent = new Intent(MainActivity.this, FullImageView.class);
+            intent.putExtra("img_url", img_rul);
+            startActivity(intent);
+        }
     }
 }
