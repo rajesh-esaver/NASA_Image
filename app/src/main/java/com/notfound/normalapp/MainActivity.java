@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements
             String todayDate = simpleDateFormat.format(todayDay);
             if(todayDate.equals(currSelectedDate)){
                 //current selected date is today's date, can't request next image
+                txtImgOfDayInfo.setText("NASA Image of the Day:");
                 showToast("Next image is not available");
                 return;
             }
@@ -152,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements
             String tmpCurrdate = simpleDateFormat.format(newDate);
             currSelectedDate = tmpCurrdate;
             //showToast(currSelectedDate); //to see the date
+            txtImgOfDayInfo.setText(Constants.IMAGE_DAY_INFO);
             requestNewImage(tmpCurrdate);
         }catch (Exception e){
             Timber.e(e.getMessage());
@@ -170,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements
             String tmpCurrdate = simpleDateFormat.format(newDate);
             currSelectedDate = tmpCurrdate;
             //showToast(currSelectedDate); //to see the date
+            txtImgOfDayInfo.setText(Constants.IMAGE_DAY_INFO);
             requestNewImage(tmpCurrdate);
         }catch (Exception e){
             Log.e(getLocalClassName(),e.getMessage());
@@ -265,6 +268,7 @@ public class MainActivity extends AppCompatActivity implements
         txtErrorUrl.setText("");
         txtErrorUrl.setVisibility(View.GONE);
         String formattedDate = getFormattedDate(year,month,day);
+        txtImgOfDayInfo.setText(Constants.IMAGE_DAY_INFO);
         requestNewImage(formattedDate);
     }
 

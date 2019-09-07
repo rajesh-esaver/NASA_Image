@@ -52,7 +52,7 @@ public class FullImageView extends AppCompatActivity implements Toolbar.OnMenuIt
 
         //setting the toolbar
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Image of the day");
+        getSupportActionBar().setTitle("Image From NASA");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setOnMenuItemClickListener(FullImageView.this);
@@ -127,12 +127,14 @@ public class FullImageView extends AppCompatActivity implements Toolbar.OnMenuIt
         BitmapDrawable drawable = (BitmapDrawable) imgOfTheDay.getDrawable();
         Bitmap bitImage = drawable.getBitmap();
         try {
+            //saving the image
             File cachePath = new File(this.getCacheDir(), "images");
             cachePath.mkdirs(); // don't forget to make the directory
             FileOutputStream stream = new FileOutputStream(cachePath + "/image.png"); // overwrites this image every time
             bitImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
             stream.close();
 
+            //getting uri
             File imagePath = new File(this.getCacheDir(), "images");
             File newFile = new File(imagePath, "image.png");
             Uri contentUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileprovider", newFile);
