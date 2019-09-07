@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.SpannableString;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,11 +30,15 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.github.pwittchen.swipe.library.rx2.SimpleSwipeListener;
+import com.github.pwittchen.swipe.library.rx2.Swipe;
 import com.notfound.normalapp.pojo.ApodImage;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements
         Toolbar.OnMenuItemClickListener,
@@ -52,7 +57,8 @@ public class MainActivity extends AppCompatActivity implements
     Calendar calendar;
     ApodViewModel apodViewModel;
     String currSelectedDate="", imgUrl = "",imgDesc="";
-    SpannableString spannableString;
+    Swipe swipe;
+    Date todayDay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,10 +84,14 @@ public class MainActivity extends AppCompatActivity implements
         //get current day
         calendar = Calendar.getInstance();
         Date date = calendar.getTime();
+        todayDay = date;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_FORMATTER);
         String tmpCurrdate = simpleDateFormat.format(date);
         currSelectedDate = tmpCurrdate;
         requestNewImage(tmpCurrdate);
+
+        swipe = new Swipe();
+        listenForSwipes();
 
         txtDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +107,77 @@ public class MainActivity extends AppCompatActivity implements
                 openFullImageViewActivity();
             }
         });
+    }
+
+    private void listenForSwipes() {
+        swipe.setListener(new SimpleSwipeListener() {
+            @Override
+            public boolean onSwipedLeft(MotionEvent event) {
+                showToast("swiped left");
+                // need to move right
+                requestNextImageOfTheDay();
+                return super.onSwipedLeft(event);
+            }
+
+            @Override
+            public boolean onSwipedRight(MotionEvent event) {
+                showToast("swiped right");
+                // need to move back
+                requestPreviousImageOfTheDay();
+                return super.onSwipedRight(event);
+            }
+        });
+    }
+
+    private void requestNextImageOfTheDay() {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_FORMATTER);
+
+            //check currSelected equal to today's date
+            String todayDate = simpleDateFormat.format(todayDay);
+            if(todayDate.equals(currSelectedDate)){
+                //current selected date is today's date, can't request next image
+                //showToast("Can't move further than this");
+                return;
+            }
+
+            Date date = simpleDateFormat.parse(currSelectedDate);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.DATE,1);
+            Date newDate = cal.getTime();
+
+            String tmpCurrdate = simpleDateFormat.format(newDate);
+            currSelectedDate = tmpCurrdate;
+            //showToast(currSelectedDate); //to see the date
+            requestNewImage(tmpCurrdate);
+        }catch (Exception e){
+            Timber.e(e.getMessage());
+        }
+    }
+
+    private void requestPreviousImageOfTheDay() {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_FORMATTER);
+            Date date = simpleDateFormat.parse(currSelectedDate);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.DATE,-1);
+            Date newDate = cal.getTime();
+
+            String tmpCurrdate = simpleDateFormat.format(newDate);
+            currSelectedDate = tmpCurrdate;
+            //showToast(currSelectedDate); //to see the date
+            requestNewImage(tmpCurrdate);
+        }catch (Exception e){
+            Log.e(getLocalClassName(),e.getMessage());
+        }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        swipe.dispatchTouchEvent(ev);
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override

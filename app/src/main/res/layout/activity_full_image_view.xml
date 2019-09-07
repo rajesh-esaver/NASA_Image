@@ -25,7 +25,7 @@
         android:id="@+id/txtFullImageTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:textSize="18dp"
         android:text="Image of the day"
         android:textColor="@color/white"
         android:textAlignment="center"

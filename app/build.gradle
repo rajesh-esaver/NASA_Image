@@ -45,6 +45,7 @@ dependencies {
     implementation "android.arch.lifecycle:viewmodel:1.1.0"
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+    implementation 'com.github.pwittchen:swipe-rx2:0.3.0'
 
 
     //add these libraries
