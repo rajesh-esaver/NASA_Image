@@ -5,7 +5,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -222,15 +224,33 @@ public class MainActivity extends AppCompatActivity implements
             showDatePicker();
         }else if(menuItem.getItemId()==R.id.menu_clear_cache){
             //removing all records from db
-
-            apodViewModel.deleteAllFromDB(MainActivity.this);
+            popUpConfirmDialogBox();
+            //apodViewModel.deleteAllFromDB(MainActivity.this);
         }
         return true;
     }
 
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
+    private void popUpConfirmDialogBox() {
+        DialogInterface.OnClickListener digClick = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                switch (i){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //clicked on remove
+                        apodViewModel.deleteAllFromDB(MainActivity.this);
+                        showToast("Removing cached data..");
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //clicked on cancel
+                        break;
+                }
+            }
+        };
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage(Constants.CACHE_REMOVE_DIALOUGE_TEXT).setPositiveButton("Remove",digClick).setNegativeButton("Cancel",digClick);
+
+        builder.create().show();
     }
 
     public void showDatePicker(){
@@ -309,7 +329,7 @@ public class MainActivity extends AppCompatActivity implements
         }else{
             formattedDate += "-" + String.valueOf(day);
         }
-        showToast(formattedDate);
+        //showToast(formattedDate);
         return formattedDate;
     }
 
