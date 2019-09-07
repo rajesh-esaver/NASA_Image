@@ -154,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements
             currSelectedDate = tmpCurrdate;
             //showToast(currSelectedDate); //to see the date
             txtImgOfDayInfo.setText(Constants.IMAGE_DAY_INFO);
+            hideTextErrorUrl();
             requestNewImage(tmpCurrdate);
         }catch (Exception e){
             Timber.e(e.getMessage());
@@ -173,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements
             currSelectedDate = tmpCurrdate;
             //showToast(currSelectedDate); //to see the date
             txtImgOfDayInfo.setText(Constants.IMAGE_DAY_INFO);
+            hideTextErrorUrl();
             requestNewImage(tmpCurrdate);
         }catch (Exception e){
             Log.e(getLocalClassName(),e.getMessage());
@@ -302,8 +304,7 @@ public class MainActivity extends AppCompatActivity implements
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         pgsImgLoading.setVisibility(View.GONE);
-                        txtErrorUrl.setText("");
-                        txtErrorUrl.setVisibility(View.GONE);
+                        hideTextErrorUrl();
                         imgUrl = apodImage.getHdurl();
                         imgDesc = apodImage.getTittle();
                         //showToast("Image loaded successfully");
@@ -340,6 +341,11 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         return false;
+    }
+
+    public void hideTextErrorUrl() {
+        txtErrorUrl.setText("");
+        txtErrorUrl.setVisibility(View.GONE);
     }
 
     public void openFullImageViewActivity() {
