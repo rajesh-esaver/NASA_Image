@@ -103,7 +103,7 @@ public class FullImageView extends AppCompatActivity implements Toolbar.OnMenuIt
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        showToast("Image loaded successfully");
+                        //showToast("Image loaded successfully");
                         return false;
                     }
                 })

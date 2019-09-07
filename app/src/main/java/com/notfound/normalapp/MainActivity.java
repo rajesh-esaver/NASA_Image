@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements
         swipe.setListener(new SimpleSwipeListener() {
             @Override
             public boolean onSwipedLeft(MotionEvent event) {
-                showToast("swiped left");
+                //showToast("swiped left");
                 // need to move right
                 requestNextImageOfTheDay();
                 return super.onSwipedLeft(event);
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements
 
             @Override
             public boolean onSwipedRight(MotionEvent event) {
-                showToast("swiped right");
+                //showToast("swiped right");
                 // need to move back
                 requestPreviousImageOfTheDay();
                 return super.onSwipedRight(event);
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements
             String todayDate = simpleDateFormat.format(todayDay);
             if(todayDate.equals(currSelectedDate)){
                 //current selected date is today's date, can't request next image
-                //showToast("Can't move further than this");
+                showToast("Next image is not available");
                 return;
             }
 
@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements
         apodViewModel.getApodImageLiveData().observe(this, new Observer<ApodImage>() {
             @Override
             public void onChanged(ApodImage apodImage) {
-                showToast("live data");
+                //showToast("live data");
                 /*Glide.with(getApplicationContext())
                         .load(apodImage.getHdurl())
                         .into(imgOfTheDay);*/
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements
         apodViewModel.getApodImageMutableLiveData().observe(this, new Observer<ApodImage>() {
             @Override
             public void onChanged(ApodImage apodImage) {
-                showToast("Mutable live data");
+                //showToast("Mutable live data");
                 /*Glide.with(getApplicationContext())
                         .load(apodImage.getHdurl())
                         .into(imgOfTheDay);*/
@@ -222,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements
             showDatePicker();
         }else if(menuItem.getItemId()==R.id.menu_clear_cache){
             //removing all records from db
+
             apodViewModel.deleteAllFromDB(MainActivity.this);
         }
         return true;
@@ -281,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements
                         txtErrorUrl.setVisibility(View.GONE);
                         imgUrl = apodImage.getHdurl();
                         imgDesc = apodImage.getTittle();
-                        showToast("Image loaded successfully");
+                        //showToast("Image loaded successfully");
                         return false;
                     }
                 })
