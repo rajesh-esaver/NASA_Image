@@ -10,8 +10,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.style.ClickableSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -53,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements
 
     Calendar calendar;
     ApodViewModel apodViewModel;
-    String currSelectedDate="", img_rul = "";
+    String currSelectedDate="", imgUrl = "",imgDesc="";
     SpannableString spannableString;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements
                         pgsImgLoading.setVisibility(View.GONE);
                         txtErrorUrl.setVisibility(View.VISIBLE);
                         txtErrorUrl.setText(apodImage.getHdurl());
-                        img_rul = "";
+                        imgUrl = "";
                         return false;
                     }
 
@@ -200,7 +198,8 @@ public class MainActivity extends AppCompatActivity implements
                         pgsImgLoading.setVisibility(View.GONE);
                         txtErrorUrl.setText("");
                         txtErrorUrl.setVisibility(View.GONE);
-                        img_rul = apodImage.getHdurl();
+                        imgUrl = apodImage.getHdurl();
+                        imgDesc = apodImage.getTittle();
                         showToast("Image loaded successfully");
                         return false;
                     }
@@ -238,9 +237,10 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void openFullImageViewActivity() {
-        if(img_rul != "") {
+        if(imgUrl != "") {
             Intent intent = new Intent(MainActivity.this, FullImageView.class);
-            intent.putExtra("img_url", img_rul);
+            intent.putExtra("img_url", imgUrl);
+            intent.putExtra("img_desc", imgDesc);
             startActivity(intent);
         }
     }

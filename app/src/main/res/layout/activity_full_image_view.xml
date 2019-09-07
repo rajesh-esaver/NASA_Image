@@ -7,18 +7,28 @@
     tools:context=".MainActivity"
     android:background="@android:color/black">
 
-    <include layout="@layout/app_toolbar"
+    <include layout="@layout/app_toolbar_full_image"
         android:id="@+id/toolbar"/>
 
-    <ImageView
+    <com.github.chrisbanes.photoview.PhotoView
+        android:layout_below="@id/toolbar"
         android:id="@+id/imgOfTheDay"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:background="@null"
         android:elevation="5dp"
-        android:padding="3dp"
         android:src="@drawable/img_not_found"
         />
 
+    <TextView
+        android:id="@+id/txtFullImageTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="Image of the day"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:layout_marginBottom="30dp"
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>
